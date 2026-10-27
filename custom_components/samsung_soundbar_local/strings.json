@@ -1,0 +1,22 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Samsung Soundbar (local)",
+        "description": "Enter the soundbar's IP and its recovered OwnerPSK. The identity is the owner UUID; the key is the 16-byte PSK as hex.",
+        "data": {
+          "host": "IP address",
+          "psk_identity": "OwnerPSK identity (owner UUID)",
+          "psk_key": "OwnerPSK key (hex)"
+        }
+      }
+    },
+    "error": {
+      "invalid_credential": "The identity must be a UUID and the key 32 or 64 hex characters.",
+      "cannot_connect": "Could not authenticate to the soundbar with that credential."
+    },
+    "abort": {
+      "already_configured": "This soundbar is already configured."
+    }
+  }
+}

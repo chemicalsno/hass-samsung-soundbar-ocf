@@ -1,0 +1,40 @@
+name: Device report
+description: Report whether the integration works on your soundbar (especially an untested model)
+title: "[Device] <your model, e.g. HW-Q930C>"
+labels: ["device-report"]
+body:
+  - type: input
+    id: model
+    attributes:
+      label: Soundbar model
+      description: The exact model number
+      placeholder: HW-Q___C
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Did setup succeed?
+      options:
+        - "Yes, the device and entities were created"
+        - "Setup was rejected (handshake or credential failed)"
+        - "Other or not sure"
+    validations:
+      required: true
+  - type: input
+    id: ha_version
+    attributes:
+      label: Home Assistant version
+      placeholder: "2026.11.0"
+    validations:
+      required: true
+  - type: textarea
+    id: entities
+    attributes:
+      label: Which entities appeared?
+      description: The media_player, numbers, selects, switches and sensors you saw
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Errors from Settings > System > Logs. Remove your OwnerPSK and key before pasting.
