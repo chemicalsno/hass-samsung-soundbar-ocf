@@ -112,10 +112,16 @@ def discover_secure_port(host: str, timeout: float = 5.0) -> int:
     try:
         sock.sendto(msg, (host, UNSECURED_PORT))
         resp, _ = sock.recvfrom(4096)
+    except OSError as err:  # timeout / host unreachable: transient, let HA retry
+        raise OcfError(f"cannot reach {host}: {err}") from err
     finally:
         sock.close()
-    _, _, _, _, payload = _parse(resp)
-    for dev in cbor2.loads(payload):
+    try:
+        _, _, _, _, payload = _parse(resp)
+        reps = cbor2.loads(payload)
+    except (cbor2.CBORDecodeError, IndexError, struct.error) as err:
+        raise OcfError(f"malformed /oic/res from {host}: {err}") from err
+    for dev in reps:
         for link in dev.get("links", []):
             policy = link.get("p", {})
             if policy.get("sec") and policy.get("port"):
@@ -196,7 +202,11 @@ class OcfPskClient:
     def _open(self) -> _Session:
         port = discover_secure_port(self._host)  # rotates per boot, so read it every time
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.connect((self._host, port))
+        try:
+            sock.connect((self._host, port))
+        except OSError as err:
+            sock.close()
+            raise OcfError(f"cannot connect to {self._host}:{port}: {err}") from err
         sock.settimeout(2.0)
         dtls = DtlsPskClient(self._identity, self._key)
         for _ in range(40):
