@@ -14,14 +14,57 @@ def short(prop: str) -> str:
     return prop[len(OCF_PROP_PREFIX):] if prop.startswith(OCF_PROP_PREFIX) else prop
 
 
+# Acronyms whose casing the title-caser would mangle, applied per word.
+_ACRONYMS: dict[str, str] = {
+    "bt": "Bluetooth",
+    "wifi": "Wi-Fi",
+    "mac": "MAC",
+    "hdmi": "HDMI",
+    "usb": "USB",
+    "eq": "EQ",
+    "ip": "IP",
+    "id": "ID",
+    "duid": "DUID",
+    "micom": "MICOM",
+}
+
+# Smashed-together OCF keys the splitter cannot break on its own. Keyed by the
+# property name normalized (separators dropped, lowercased) so camelCase and
+# snake_case spellings of the same key both match.
+_DISPLAY_NAMES: dict[str, str] = {
+    "audiosync": "Audio Sync",
+    "bassboost": "Bass Boost",
+    "voiceamplifier": "Voice Amplifier",
+    "nightmode": "Night Mode",
+    "autoeqmode": "Auto EQ Mode",
+    "currenteqmode": "Current EQ Mode",
+    "calibrationstatus": "Calibration Status",
+    "tunestatus": "Tune Status",
+    "bluetoothmac": "Bluetooth MAC",
+    "wifimac": "Wi-Fi MAC",
+    "hwduid": "Hardware DUID",
+    "micsupport": "Mic Support",
+    "micomversion": "MICOM Version",
+    "numofhdmi": "HDMI Count",
+    "btappready": "Bluetooth App Ready",
+    "uniquedevicenumber": "Unique Device Number",
+    "eqname": "EQ Preset",
+    "passthruenable": "Pass Through",
+}
+
+
 def pretty(name: str) -> str:
-    """camelCase/path tail -> 'Title Case' label."""
+    """OCF property key -> human 'Title Case' label."""
+    normalized = name.replace("_", "").replace("/", "").lower()
+    if normalized in _DISPLAY_NAMES:
+        return _DISPLAY_NAMES[normalized]
     out: list[str] = []
     for i, ch in enumerate(name):
         if ch.isupper() and i and not name[i - 1].isupper():
             out.append(" ")
         out.append(ch)
-    return "".join(out).replace("_", " ").replace("/", " ").strip().title()
+    words = "".join(out).replace("_", " ").replace("/", " ").split()
+    return " ".join(_ACRONYMS.get(w.lower(), w.title()) for w in words)
 
 
 class SoundbarEntity(CoordinatorEntity[SoundbarCoordinator]):
