@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .const import MEDIA_PLAYER_PATHS, OCF_PROP_PREFIX
+from .const import MEDIA_PLAYER_PATHS, MEDIA_PLAYER_SKIP_PATHS, OCF_PROP_PREFIX
 
 
 @dataclass(frozen=True)
@@ -42,6 +42,7 @@ CONTROL_PROPS: frozenset[str] = frozenset(
         "symphony",
         "language",
         "EQname",
+        "soundmode",
     }
 )
 
@@ -68,7 +69,7 @@ def _supported_options(rep: dict, short_name: str) -> tuple[str, ...] | None:
 def iter_specs(data: dict[str, dict]) -> list[EntitySpec]:
     specs: list[EntitySpec] = []
     for path, rep in data.items():
-        if path in MEDIA_PLAYER_PATHS:
+        if path in MEDIA_PLAYER_SKIP_PATHS:
             continue
         writable = _writable(rep)
         for prop, value in rep.items():

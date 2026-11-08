@@ -32,6 +32,10 @@ _ACRONYMS: dict[str, str] = {
 # property name normalized (separators dropped, lowercased) so camelCase and
 # snake_case spellings of the same key both match.
 _DISPLAY_NAMES: dict[str, str] = {
+    "soundmode": "Sound Mode",
+    "symphony": "Q-Symphony",
+    "spacefitsound": "SpaceFit Sound",
+    "currentrearposition": "Rear Speaker Position",
     "audiosync": "Audio Sync",
     "bassboost": "Bass Boost",
     "voiceamplifier": "Voice Amplifier",

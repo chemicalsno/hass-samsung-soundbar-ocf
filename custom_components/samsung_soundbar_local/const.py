@@ -58,8 +58,7 @@ NON_CONTROL_KEYS: frozenset[str] = frozenset(
     {"rt", "if", "n", "id", "p", "eps", "links", "di", "icv", "dmv"}
 )
 
-# Resources/properties the media_player entity owns, so the generic factories
-# skip them to avoid duplicate entities.
+# Resources the media_player reads directly; always fast-polled.
 MEDIA_PLAYER_PATHS: frozenset[str] = frozenset(
     {
         "/sec/networkaudio/switch/binary",
@@ -68,6 +67,11 @@ MEDIA_PLAYER_PATHS: frozenset[str] = frozenset(
         "/sec/networkaudio/soundmode",
     }
 )
+
+# Of those, the ones the media_player owns exclusively, so the generic factories
+# skip them to avoid duplicate entities. soundmode is intentionally excluded: it
+# also gets its own Sound Mode select while the media_player keeps reading it.
+MEDIA_PLAYER_SKIP_PATHS: frozenset[str] = MEDIA_PLAYER_PATHS - {"/sec/networkaudio/soundmode"}
 
 # Property -> sibling property holding the enum of valid values, for select mapping.
 SUPPORTED_SUFFIX = "supported"
