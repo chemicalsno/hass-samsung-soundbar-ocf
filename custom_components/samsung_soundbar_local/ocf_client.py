@@ -153,7 +153,7 @@ class _Session:
         while time.monotonic() < deadline:
             try:
                 self._dtls.bio_write(self._sock.recv(65535))
-            except socket.timeout:
+            except TimeoutError:
                 try:
                     self._dtls.DTLSv1_handle_timeout()
                 except Exception:  # noqa: BLE001 - best-effort retransmit
@@ -221,7 +221,7 @@ class OcfPskClient:
             _Session._flush(dtls, sock)
             try:
                 dtls.bio_write(sock.recv(65535))
-            except socket.timeout:
+            except TimeoutError:
                 try:
                     dtls.DTLSv1_handle_timeout()
                 except Exception:  # noqa: BLE001

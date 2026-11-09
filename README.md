@@ -1,5 +1,10 @@
 # Samsung Soundbar Local (OCF/DTLS-PSK)
 
+[![Validate](https://github.com/chemicalsno/hass-samsung-soundbar-ocf/actions/workflows/validate.yml/badge.svg)](https://github.com/chemicalsno/hass-samsung-soundbar-ocf/actions/workflows/validate.yml)
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+[![Release](https://img.shields.io/github/v/release/chemicalsno/hass-samsung-soundbar-ocf)](https://github.com/chemicalsno/hass-samsung-soundbar-ocf/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 Cloud-free local control for Samsung Wi-Fi soundbars that expose the OCF
 `/sec/networkaudio` interface (verified on the 2023 **HW-Q900C**). Home Assistant
 talks straight to the bar over the LAN with DTLS, authenticated by the device's own
